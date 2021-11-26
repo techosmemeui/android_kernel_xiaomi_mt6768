@@ -686,29 +686,8 @@ KBUILD_CFLAGS	+= $(call cc-disable-warning, stringop-overread)
 ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
 KBUILD_CFLAGS   += -Os
 else
-ifeq ($(cc-name),clang)
 KBUILD_CFLAGS   += -O3
-else
-KBUILD_CFLAGS   += -O2
-endif
 
-KBUILD_CFLAGS += $(call cc-ifversion, -gt, 0900, \
-			$(call cc-option, -Wno-psabi) \
-			$(call cc-disable-warning,maybe-uninitialized,) \
-			$(call cc-disable-warning,format,) \
-			$(call cc-disable-warning,array-bounds,) \
-			$(call cc-disable-warning,stringop-overflow,))
-endif
-
-KBUILD_CFLAGS += $(call cc-ifversion, -lt, 0409, \
-			$(call cc-disable-warning,maybe-uninitialized,))
-
-ifeq ($(cc-name),clang)
-KBUILD_CFLAGS   += -mcpu=cortex-a55 -mtune=cortex-a55
-endif
-
-ifeq ($(cc-name),gcc)
-KBUILD_CFLAGS   += -mcpu=cortex-a75.cortex-a55 -mtune=cortex-a75.cortex-a55
 endif
 
 # Tell gcc to never replace conditional load with a non-conditional one
